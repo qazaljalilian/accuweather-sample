@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <p> type the name of your city</p>
+    <button type="button" onclick="loadDoc()">send</button>
+    <input id="city"></input>
+    <p id="demo"></p>
+
+    <script>
+        const API_KEY = ""; //place your api key here
+        if (typeof (Storage) !== "undefined") {
+            document.getElementById("demo").innerHTML = localStorage.getItem("response");
+        } else {
+            document.getElementById("demo").innerHTML = "Sorry, your browser does not support Web Storage...";
+        }
+        function loadDoc() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (typeof (Storage) !== "undefined") {
+                        localStorage.setItem("response", this.responseText);
+                    } else {
+                        document.getElementById("demo").innerHTML = "Sorry, your browser does not support Web Storage...";
+                    }
+                    document.getElementById("demo").innerHTML = this.responseText;
+                }
+            };
+            var q = document.getElementById("city").value;
+            xhttp.open("GET", "http://dataservice.accuweather.com/locations/v1/cities/search?apikey=" + API_KEY + "&q=" + q, true);
+            xhttp.send();
+        }
+    </script>
+</body>
+
+</html>
